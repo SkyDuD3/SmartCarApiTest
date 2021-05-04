@@ -7,11 +7,17 @@ import com.google.gson.JsonParser;
 import com.smartcar.sdk.*;
 import com.smartcar.sdk.data.*;
 import java.awt.Color;
+import java.awt.Desktop;
+import java.text.DecimalFormat;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -28,6 +34,7 @@ public class MyCarApp extends javax.swing.JFrame {
     private String access;
     private static Gson gson = new Gson();
     private int z;
+    private static DecimalFormat df2 = new DecimalFormat("#.##");
 
     /**
      * Creates new form MyCarApp
@@ -67,7 +74,6 @@ public class MyCarApp extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         display = new javax.swing.JTextArea();
         veh = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
         vehs = new javax.swing.JButton();
         jQuant = new javax.swing.JSpinner();
         jOdometer = new javax.swing.JButton();
@@ -108,6 +114,24 @@ public class MyCarApp extends javax.swing.JFrame {
         jLabel11 = new javax.swing.JLabel();
         jPlugy = new javax.swing.JToggleButton();
         jPlugn = new javax.swing.JToggleButton();
+        jPanel1 = new javax.swing.JPanel();
+        jsFRT = new javax.swing.JSlider();
+        jsFLT = new javax.swing.JSlider();
+        jsRLT = new javax.swing.JSlider();
+        jsRRT = new javax.swing.JSlider();
+        jTires = new javax.swing.JButton();
+        jLocation = new javax.swing.JButton();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        displayloc = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jlFLT = new javax.swing.JLabel();
+        jlFRT = new javax.swing.JLabel();
+        jlRLT = new javax.swing.JLabel();
+        jlRRT = new javax.swing.JLabel();
+        jReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -130,17 +154,6 @@ public class MyCarApp extends javax.swing.JFrame {
                 vehActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
-        );
 
         vehs.setText("Vehicles");
         vehs.addActionListener(new java.awt.event.ActionListener() {
@@ -370,9 +383,9 @@ public class MyCarApp extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(batteryBar, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel11))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel8))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -391,38 +404,185 @@ public class MyCarApp extends javax.swing.JFrame {
                     .addComponent(jLabel13)
                     .addComponent(jLabel14)
                     .addComponent(jLabel15))
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         jRangeStats.addTab("Battery Stats", jPanel3);
+
+        jsFRT.setMaximum(4);
+        jsFRT.setOrientation(javax.swing.JSlider.VERTICAL);
+
+        jsFLT.setMaximum(4);
+        jsFLT.setOrientation(javax.swing.JSlider.VERTICAL);
+
+        jsRLT.setMaximum(4);
+        jsRLT.setOrientation(javax.swing.JSlider.VERTICAL);
+
+        jsRRT.setMaximum(4);
+        jsRRT.setOrientation(javax.swing.JSlider.VERTICAL);
+
+        jTires.setText("Tire Pressure");
+        jTires.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTiresActionPerformed(evt);
+            }
+        });
+
+        jLocation.setText("Location");
+        jLocation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jLocationActionPerformed(evt);
+            }
+        });
+
+        displayloc.setEditable(false);
+        displayloc.setColumns(20);
+        displayloc.setLineWrap(true);
+        displayloc.setTabSize(0);
+        displayloc.setToolTipText("");
+        displayloc.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jScrollPane8.setViewportView(displayloc);
+
+        jLabel3.setText("Front Left Tire");
+
+        jLabel12.setText("Front Right Tire");
+
+        jLabel16.setText("Back Left Tire");
+
+        jLabel17.setText("Back Left Tire");
+
+        jlFLT.setText("----------");
+
+        jlFRT.setText("-----------");
+
+        jlRLT.setText("------------");
+
+        jlRRT.setText("-----------");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTires)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLocation)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(17, 17, 17)
+                                .addComponent(jlRLT, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jsRLT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jlFLT)
+                                        .addGap(18, 18, 18)))
+                                .addComponent(jsFLT, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jsRRT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jsFRT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel12)
+                    .addComponent(jlRRT, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jlFRT, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(27, 27, 27))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLocation, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jTires)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jsFLT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jsFRT, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel12)
+                        .addGap(31, 31, 31)
+                        .addComponent(jlFRT))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel3)
+                        .addGap(27, 27, 27)
+                        .addComponent(jlFLT)))
+                .addGap(14, 14, 14)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel17)
+                    .addComponent(jLabel16))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jsRRT, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jsRLT, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addComponent(jlRRT))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(54, 54, 54)
+                        .addComponent(jlRLT)))
+                .addGap(28, 28, 28))
+        );
+
+        jReset.setText("Reset Fields");
+        jReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jResetActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jOdometer, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                .addComponent(login)
-                                .addGap(18, 18, 18)
-                                .addComponent(veh)
-                                .addGap(4, 4, 4)
-                                .addComponent(jQuant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(vehs)))
-                        .addGap(0, 366, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(login)
+                        .addGap(18, 18, 18)
+                        .addComponent(veh)
+                        .addGap(4, 4, 4)
+                        .addComponent(jQuant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(vehs)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jReset))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jOdometer)
                             .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jRangeStats, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -432,22 +592,21 @@ public class MyCarApp extends javax.swing.JFrame {
                     .addComponent(login)
                     .addComponent(veh)
                     .addComponent(vehs)
-                    .addComponent(jQuant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jQuant, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jReset))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jOdometer)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jRangeStats))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(39, 39, 39)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         pack();
@@ -515,7 +674,7 @@ public class MyCarApp extends javax.swing.JFrame {
                 System.out.println(odom);
                 System.out.println(gson.toJson(odom));
                 System.out.println(gson.toJson(odom));
-                displayOdo.append(z + gson.toJson(odometer + " Kilometers"));
+                displayOdo.append(z + gson.toJson(df2.format(odometer) + " Kilometers"));
 
             } catch (SmartcarException ex) {
                 Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -583,17 +742,18 @@ public class MyCarApp extends javax.swing.JFrame {
                 double vehperc = Vehiclefuel.getPercentRemaining();
                 double vehrem = Vehiclefuel.getAmountRemaining();
                 vehperc = vehperc * 100;
-                jFuelstatus.setText(vehperc + "%");
                 fuelBar.setValue((int) vehperc);
-                jFuelRange.append(gson.toJson(vehrange + " Kilometers"));
-                JFuelTank.append(gson.toJson(vehrem + " Liters"));
+                jFuelstatus.setText(df2.format(vehperc) + "%");
+
+                jFuelRange.append(gson.toJson(df2.format(vehrange) + " Kilometers"));
+                JFuelTank.append(gson.toJson(df2.format(vehrem) + " Liters"));
 /////////////////////////////////oil////////////////////////////////////////////////////////////
                 SmartcarResponse<VehicleOil> VehicleOilResponse = vehicle.oil();
                 VehicleOil vehicleoilData = VehicleOilResponse.getData();
                 double vehoil = vehicleoilData.getLifeRemaining();
                 vehoil = vehoil * 100;
                 jOilBar.setValue((int) vehoil);
-                jOilStat.setText(vehoil + "%");
+                jOilStat.setText(df2.format(vehoil) + "%");
 
             } catch (SmartcarException ex) {
                 Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -623,12 +783,12 @@ public class MyCarApp extends javax.swing.JFrame {
                 vehbat = vehbat * 100;
                 batteryBar.setValue((int) vehbat);
                 jBatn.setText(vehbat + "%");
-                jBatteryRange.append(gson.toJson(vehbatr + " Kilometers"));
+                jBatteryRange.append(gson.toJson(df2.format(vehbatr) + " Kilometers"));
 ////////////////////////////////////////bateria geral da bateria////////////////////////////////////
                 SmartcarResponse<VehicleBatteryCapacity> VehicleBatteryCapacityResponse = vehicle.batteryCapacity();
                 VehicleBatteryCapacity vehiclebatteryCapacity = VehicleBatteryCapacityResponse.getData();
                 double vehbatc = vehiclebatteryCapacity.getCapacity();
-                jBatteryCap.append(gson.toJson(vehbatc + " kilowatt-hours"));
+                jBatteryCap.append(gson.toJson(df2.format(vehbatc) + " kilowatt-hours"));
                 //jBatn.setText(vehbatc + " kilowatt-hours");
 
 ///////////////////////////////////////Carregamento da bateria////////////////////////////////
@@ -671,6 +831,125 @@ public class MyCarApp extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_JBstatsUpdateActionPerformed
+
+    private void jTiresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTiresActionPerformed
+        try {
+            BufferedReader brTest = new BufferedReader(new FileReader("\\acess"));
+            access = brTest.readLine();
+            try {
+                SmartcarResponse<VehicleIds> vehicleIdsResponse = AuthClient.getVehicleIds(access);
+                String[] vehicleIds = vehicleIdsResponse.getData().getVehicleIds();
+                Vehicle vehicle = new Vehicle(vehicleIds[z], access);
+
+                String tire = "";
+
+                SmartcarResponse<VehicleTirePressure> VehicleTirePressureResponse = vehicle.tirePressure();
+                VehicleTirePressure vehicletirepressure = VehicleTirePressureResponse.getData();
+                double backleft = vehicletirepressure.getBackLeft();
+                double backright = vehicletirepressure.getBackRight();
+                double frontleft = vehicletirepressure.getFrontLeft();
+                double frontright = vehicletirepressure.getFrontRight();
+                backleft = backleft / 100;
+                backright = backright / 100;
+                frontleft = frontleft / 100;
+                frontright = frontright / 100;
+
+                System.out.println(backleft);
+                System.out.println(backright);
+                System.out.println(frontleft);
+                System.out.println(frontright);
+
+                jsRLT.setValue((int) backleft);
+                jsRRT.setValue((int) backright);
+                jsFLT.setValue((int) frontleft);
+                jsFRT.setValue((int) frontright);
+
+                jlRLT.setText(df2.format(backleft) + "BAR");
+                jlRRT.setText(df2.format(backright) + "BAR");
+                jlFLT.setText(df2.format(frontleft) + "BAR");
+                jlFRT.setText(df2.format(frontright) + "BAR");
+
+            } catch (SmartcarException ex) {
+                Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jTiresActionPerformed
+
+    private void jResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jResetActionPerformed
+        display.setText("");
+        displayOdo.setText("");
+        jFuelstatus.setText("-----");
+        fuelBar.setValue(0);
+        jFuelRange.setText("");
+        JFuelTank.setText("");
+        jOilBar.setValue(0);
+        jOilStat.setText("-----------------------");
+        jBatn.setText("------------");
+        batteryBar.setValue(0);
+        jBatteryRange.setText("");
+        jBatteryCap.setText("");
+        jPlugy.setText("Plugged in");
+        jPlugy.setBackground(Color.LIGHT_GRAY);
+        jPlugy.setForeground(Color.BLACK);
+        jPlugn.setBackground(Color.LIGHT_GRAY);
+        jPlugn.setForeground(Color.BLACK);
+        jState.setValue(50);
+        displayloc.setText("");
+        jlFLT.setText("----------");
+        jlRLT.setText("------------");
+        jlFRT.setText("-----------");
+        jlRRT.setText("-----------");
+        jsFLT.setValue(6);
+        jsRLT.setValue(6);
+        jsFRT.setValue(6);
+        jsRRT.setValue(6);
+        jQuant.setValue(0);
+
+
+    }//GEN-LAST:event_jResetActionPerformed
+
+    private void jLocationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jLocationActionPerformed
+        displayloc.setText("");
+        try {
+            BufferedReader brTest = new BufferedReader(new FileReader("\\acess"));
+            access = brTest.readLine();
+            try {
+                SmartcarResponse<VehicleIds> vehicleIdsResponse = AuthClient.getVehicleIds(access);
+                String[] vehicleIds = vehicleIdsResponse.getData().getVehicleIds();
+                Vehicle vehicle = new Vehicle(vehicleIds[z+1], access);
+
+
+                
+                SmartcarResponse<VehicleLocation> VehicleLocationResponse = vehicle.location();
+                VehicleLocation vehiclelocation = VehicleLocationResponse.getData();
+                double lat = vehiclelocation.getLatitude();
+                double lon = vehiclelocation.getLongitude();
+                displayloc.append(gson.toJson(lat + "" + lon + "" ));
+                
+                
+
+                try {
+
+                    Desktop.getDesktop().browse(new URI("http://maps.google.com/maps?saddr=Current%20Location&daddr="+ lat + "," + lon +""));
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (URISyntaxException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
+            } catch (SmartcarException ex) {
+                Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } catch (IOException ex) {
+            Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jLocationActionPerformed
 
     /**
      * @param args the command line arguments
@@ -718,6 +997,7 @@ public class MyCarApp extends javax.swing.JFrame {
     private javax.swing.JProgressBar batteryBar;
     private javax.swing.JTextArea display;
     private javax.swing.JTextArea displayOdo;
+    private javax.swing.JTextArea displayloc;
     private javax.swing.JProgressBar fuelBar;
     private javax.swing.JLabel jBatn;
     private javax.swing.JTextArea jBatteryCap;
@@ -727,16 +1007,21 @@ public class MyCarApp extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton jLocation;
     private javax.swing.JButton jOdometer;
     private javax.swing.JProgressBar jOilBar;
     private javax.swing.JLabel jOilStat;
@@ -747,13 +1032,24 @@ public class MyCarApp extends javax.swing.JFrame {
     private javax.swing.JToggleButton jPlugy;
     private javax.swing.JSpinner jQuant;
     private javax.swing.JTabbedPane jRangeStats;
+    private javax.swing.JButton jReset;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JSlider jState;
+    private javax.swing.JButton jTires;
+    private javax.swing.JLabel jlFLT;
+    private javax.swing.JLabel jlFRT;
+    private javax.swing.JLabel jlRLT;
+    private javax.swing.JLabel jlRRT;
+    private javax.swing.JSlider jsFLT;
+    private javax.swing.JSlider jsFRT;
+    private javax.swing.JSlider jsRLT;
+    private javax.swing.JSlider jsRRT;
     private javax.swing.JButton login;
     private javax.swing.JButton veh;
     private javax.swing.JButton vehs;
