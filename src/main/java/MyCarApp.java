@@ -646,6 +646,7 @@ public class MyCarApp extends javax.swing.JFrame {
                 display.append("make = " + make + "\n");
                 display.append("model = " + model + "\n");
                 display.append("year = " + year + "\n");
+                display.append("##########################");
 
             } catch (SmartcarException ex) {
                 Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
@@ -713,6 +714,7 @@ public class MyCarApp extends javax.swing.JFrame {
                     display.append("make = " + make + "\n");
                     display.append("model = " + model + "\n");
                     display.append("year = " + year + "\n");
+                    display.append("##########################");
                 }
             } catch (SmartcarException ex) {
                 Logger.getLogger(MyCarApp.class.getName()).log(Level.SEVERE, null, ex);
